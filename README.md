@@ -17,8 +17,8 @@
   
 
   ## Terminal Output
-  ```
-  $ FileExplorer\ > This Pc
+ ```
+$ FileExplorer\ > This Pc
 Local Volume : (C:\) : 86 GB free of 126 GB
 Local Volume : (D:\) : 322 GB free of 333 GB
 Local Volume : (E:\) : 292 GB free of 333 GB
