@@ -17,7 +17,7 @@
   
 
   ## Terminal Output
-  '''shell
+  ```
   $ FileExplorer\ > This Pc
 Local Volume : (C:\) : 86 GB free of 126 GB
 Local Volume : (D:\) : 322 GB free of 333 GB
@@ -40,4 +40,4 @@ Select a driver: (C/D/E) : E
  Python Django                            directory            0 KB                                     
  Vs Code                                  directory            4096 KB                                  
 $ E:\ > 
-'''
+```
