@@ -1,5 +1,8 @@
 # Operating-system-project-Java-Terminal_File-Explorer-
 
+### Terminal Commands
+
++ Help: Show available Commands
 + This Pc  : Show available volumes
 + Select <directory name> : Change  directory/folder
 + file       : Show content of folder
