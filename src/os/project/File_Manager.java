@@ -1,6 +1,7 @@
 package os.project;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -40,12 +41,18 @@ public class File_Manager{
                     if (files.length == 0) {
                         System.out.println("The directory is empty");
                     } else {
-                        System.out.println("Name===" + "Type===" + "Size");
+                        String form = " %1$-40s %2$-20s %3$-40s \n";
+                        System.out.format(form,"Name" ,"Type" ,"Size");
+                        System.out.format(form,"-----" ,"-----" ,"----");
                         for (File aFile : files) {
                             if (!aFile.isHidden()) {
                                 if (aFile.isDirectory()) {
-                                    System.out.println(aFile.getName() + "===" + "directory" + "===" + aFile.length());
-                                } else System.out.println(aFile.getName() + "===" + "file" + "===" + aFile.length());
+                                    String format = " %1$-40s %2$-20s %3$-40s \n";
+                                    System.out.format(format,aFile.getName() ,"directory" ,aFile.length()+" KB");
+                                } else{
+                                    String format = " %1$-40s %2$-20s %3$-40s \n";
+                                    System.out.format(format,aFile.getName() ,"file" ,aFile.length()+" KB");
+                                }
                             }
                         }
                     }
@@ -72,10 +79,14 @@ public class File_Manager{
                         if (files.length == 0) {
                             System.out.println("The directory is empty");
                         } else {
+                            String form = " %1$-40s %2$-20s %3$-40s \n";
+                            System.out.format(form,"Name" ,"Type" ,"Size");
+                            System.out.format(form,"-----" ,"-----" ,"----");
                             for (File aFile : files) {
                                 if (!aFile.isHidden()) {
                                     if (aFile.isDirectory()) {
-                                        System.out.println(aFile.getName() + "===" + "directory" + "===" + aFile.length());
+                                        String format = " %1$-40s %2$-20s %3$-40s \n";
+                                        System.out.format(format,aFile.getName() ,"directory" ,aFile.length()+" KB");
                                     }
                                 }
                             }
@@ -92,10 +103,14 @@ public class File_Manager{
                         if (files.length == 0) {
                             System.out.println("The directory is empty");
                         } else {
+                            String form = " %1$-40s %2$-20s %3$-40s \n";
+                            System.out.format(form,"Name" ,"Type" ,"Size");
+                            System.out.format(form,"-----" ,"-----" ,"----");
                             for (File aFile : files) {
                                 if (!aFile.isHidden()) {
                                     if (aFile.isFile()) {
-                                        System.out.println(aFile.getName() + "===" + "file" + "===" + aFile.length());
+                                        String format = " %1$-40s %2$-20s %3$-40s \n";
+                                        System.out.format(format,aFile.getName() ,"file" ,aFile.length()+" KB");
                                     }
                                 }
                             }
@@ -140,6 +155,7 @@ public class File_Manager{
                         System.out.println(dir.getName());
                         copy.push(dir.getName());
                         copy.push(stack.peek().replace("\\", "\\\\"));
+                        copy.push("Copy");
                     }
                     else {
                         String path = stack.peek() + curr_path[1];
@@ -147,12 +163,14 @@ public class File_Manager{
                         copy.push(curr_path[1]);
 
                         copy.push(path.replace("\\", "\\\\"));
+                        copy.push("Copy");
                     }
 
                 }
 
 
                 else if(str.startsWith("Paste")){
+                    String type=copy.pop();
                     File filepath=new File(copy.pop());
                     String fileName = copy.pop();
                     String dstPath = stack.peek() + fileName;
@@ -165,6 +183,7 @@ public class File_Manager{
 
                         Files.copy(filepath.toPath(), dst.toPath());
                     }
+                    if(type.equals("Cut"))delete(filepath.toPath());
 
                 }
 
@@ -186,6 +205,52 @@ public class File_Manager{
                         delete(f1.toPath());
                     }
                 }
+
+                else if(str.startsWith("Open")){
+                    String[] curr_path=str.split("Open ");
+                    String path1=stack.peek()+curr_path[1];
+                    File f1=new File(path1);
+                    Desktop desktop = Desktop.getDesktop();
+                    if(!f1.exists()) System.out.println("File doesn't exist");
+                    if(f1.isDirectory()){
+                        System.out.println("To Open directory use 'Select' command");
+                    }
+                    else{
+                        if(!Desktop.isDesktopSupported())//check if Desktop is supported by Platform or not
+                        {
+                            System.out.println("not supported");
+                        }
+                        else{
+                            desktop.open(f1);
+                        }
+                    }
+                }
+
+                else if(str.startsWith("Volume")){
+                    String[] curr_path=str.split("Volume ");
+                    stack.push(curr_path[1]+":\\");
+                }
+
+                else if(str.startsWith("Cut")){
+                    String[] curr_path=str.split("Cut ");
+
+                    if(curr_path[1].equals("dir")){
+                        File dir=new File(stack.peek());
+                        System.out.println(dir.getName());
+                        copy.push(dir.getName());
+                        copy.push(stack.peek().replace("\\", "\\\\"));
+                        copy.push("Cut");
+                    }
+                    else {
+                        String path = stack.peek() + curr_path[1];
+
+                        copy.push(curr_path[1]);
+
+                        copy.push(path.replace("\\", "\\\\"));
+                        copy.push("Cut");
+                    }
+                }
+
 
                 else if(str.equals("Help")){
                     System.out.println("**************************************"
