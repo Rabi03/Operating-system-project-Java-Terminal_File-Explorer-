@@ -59,12 +59,35 @@ public class File_Manager{
                 }
                 else if(str.startsWith("Select")){
                     String[] curr_path=str.split("Select ");
-                    String path=stack.peek()+curr_path[1]+"\\";
-                    File dir = new File(path);
-                    if(dir.exists())
-                    stack.push(stack.peek()+curr_path[1]+"\\");
-                    else
-                        System.out.println(curr_path[1]+" is not exits");
+                    if(curr_path[1].contains("\\")){
+                        File f = new File(curr_path[1]);
+                        if(f.exists()){
+                            if(f.isDirectory()){
+                                stack.push(curr_path[1]);
+                            }else{
+                                Open(curr_path[1]);
+                            }
+                        }
+                        else{
+                            System.out.println("Invalid Path is given or Please add '\' at the end of the path");
+                        }
+
+                    }
+                    else {
+                        String path = stack.peek() + curr_path[1] + "\\";
+                        File dir = new File(path);
+
+                        if (dir.exists())
+                            stack.push(stack.peek() + curr_path[1] + "\\");
+                        else
+                            System.out.println(curr_path[1] + " is not exits");
+                    }
+                }
+                else if(str.startsWith("cmd")){
+                    String path=stack.peek().replace("\\", "\\\\");
+                    ProcessBuilder start = new ProcessBuilder("cmd.exe", "/c", "start");
+                    start.directory(new File(path));
+                    start.start();
                 }
                 else if(str.startsWith("Back")){
                     stack.pop();
@@ -209,21 +232,7 @@ public class File_Manager{
                 else if(str.startsWith("Open")){
                     String[] curr_path=str.split("Open ");
                     String path1=stack.peek()+curr_path[1];
-                    File f1=new File(path1);
-                    Desktop desktop = Desktop.getDesktop();
-                    if(!f1.exists()) System.out.println("File doesn't exist");
-                    if(f1.isDirectory()){
-                        System.out.println("To Open directory use 'Select' command");
-                    }
-                    else{
-                        if(!Desktop.isDesktopSupported())//check if Desktop is supported by Platform or not
-                        {
-                            System.out.println("not supported");
-                        }
-                        else{
-                            desktop.open(f1);
-                        }
-                    }
+                    Open(path1);
                 }
 
                 else if(str.startsWith("Volume")){
@@ -255,14 +264,15 @@ public class File_Manager{
                 else if(str.equals("Help")){
                     System.out.println("**************************************"
                             + "\nThis Pc  : Show available volumes "
-                            + "\nSelect  : Change  directory/folder "
-                            + "\nfile       : Show content of folder"
-                            + "\ndir   : show directories or folders"
-                            + "\nBack   : previous Directory"
-                            + "\nmkdir  : Create Directory"
-                            + "\nmkfile : Create File"
+                            + "\ncmd      : To Open Command Prompt in current directory"
+                            + "\nSelect   : Change  directory/folder "
+                            + "\nfile     : Show content of folder"
+                            + "\ndir      : show directories or folders"
+                            + "\nBack     : previous Directory"
+                            + "\nmkdir    : Create Directory"
+                            + "\nmkfile   : Create File"
                             + "\nDelete   : Delete File or Folder"
-                            + "\nCopy/Paste   : Copy or paste File or Folder"
+                            + "\nCopy/Paste : Copy or paste File or Folder"
                             + "\nexit     : Exit"
                             + "\n**************************************");
                 }
@@ -270,6 +280,24 @@ public class File_Manager{
                 else {
                     System.out.println("Please Enter a valid Command");
                     continue;
+                }
+            }
+        }
+
+        private static void Open(String path) throws IOException {
+            File f1=new File(path);
+            Desktop desktop = Desktop.getDesktop();
+            if(!f1.exists()) System.out.println("File doesn't exist");
+            if(f1.isDirectory()){
+                System.out.println("To Open directory use 'Select' command");
+            }
+            else{
+                if(!Desktop.isDesktopSupported())//check if Desktop is supported by Platform or not
+                {
+                    System.out.println("not supported");
+                }
+                else{
+                    desktop.open(f1);
                 }
             }
         }
