@@ -4,6 +4,7 @@
 
 + Help: Show available Commands
 + This Pc  : Show available volumes
++ cmd  : To Open Command Prompt
 + Select <directory name> : Change  directory/folder
 + file       : Show content of folder
 + dir   : show directories or folders
