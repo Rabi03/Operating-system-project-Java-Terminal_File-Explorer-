@@ -11,8 +11,10 @@
 + mkdir  : Create Directory
 + mkfile : Create File
 + Delete  <file or dir name> : Delete File or Folder
-+ Copy dir or Copy <file name>   : Copy or paste File or Folder
++ Copy dir or Copy <file name>   : Copy  File or Folder
++ Cut dir or Cut <file name>   : Cut  File or Folder
 + Paste: Paste file or folder to another directory
++ Open <file name> : To open file
 + exit     : Exit
   
 
